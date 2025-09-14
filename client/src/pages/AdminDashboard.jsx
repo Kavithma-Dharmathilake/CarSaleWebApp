@@ -435,59 +435,33 @@ const AdminDashboard = () => {
       
       {/* Statistics Cards */}
       <Row className="stats-grid">
-        <Col md={10}>
-          <Card className="stat-card text-center h-100">
-            <Card.Body className="py-4">
-              <h2 className="text-primary mb-2">{stats.totalCars}</h2>
-              <p className="text-muted mb-0">Total Cars</p>
+        <Col md={4}>
+          <Card className="stat-card text-center" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none' }}>
+            <Card.Body>
+              <h3 style={{ color: '#4ade80', fontSize: '2.5rem', fontWeight: 'bold' }}>{stats.totalCars}</h3>
+              <p style={{ color: 'white', marginBottom: 0, fontSize: '1.1rem', fontWeight: '500' }}>Total Cars</p>
             </Card.Body>
           </Card>
         </Col>
-        <Col md={10}>
-          <Card className="stat-card text-center h-100">
-            <Card.Body className="py-4">
-              <h2 className="text-success mb-2">{stats.availableCars}</h2>
-              <p className="text-muted mb-0">Active</p>
+        <Col md={4}>
+          <Card className="stat-card text-center" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none' }}>
+            <Card.Body>
+              <h3 style={{ color: '#4ade80', fontSize: '2.5rem', fontWeight: 'bold' }}>{stats.availableCars}</h3>
+              <p style={{ color: 'white', marginBottom: 0, fontSize: '1.1rem', fontWeight: '500' }}>Active</p>
             </Card.Body>
           </Card>
         </Col>
-        <Col md={10}>
-          <Card className="stat-card text-center h-100">
-            <Card.Body className="py-4">
-              <h2 className="text-danger mb-2">{stats.soldCars}</h2>
-              <p className="text-muted mb-0">Sold</p>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-      <Row className="stats-grid">
-        <Col md={10}>
-          <Card className="stat-card text-center h-100">
-            <Card.Body className="py-4">
-              <h2 className="text-warning mb-2">{stats.pendingCars}</h2>
-              <p className="text-muted mb-0">Pending</p>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={10}>
-          <Card className="stat-card text-center h-100">
-            <Card.Body className="py-4">
-              <h2 className="text-secondary mb-2">{stats.inactiveCars}</h2>
-              <p className="text-muted mb-0">Inactive</p>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={10}>
-          <Card className="stat-card text-center h-100">
-            <Card.Body className="py-4">
-              <h2 className="text-info mb-2">{stats.totalUsers}</h2>
-              <p className="text-muted mb-0">Total Users</p>
+        <Col md={4}>
+          <Card className="stat-card text-center" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none' }}>
+            <Card.Body>
+              <h3 style={{ color: '#4ade80', fontSize: '2.5rem', fontWeight: 'bold' }}>{stats.soldCars}</h3>
+              <p style={{ color: 'white', marginBottom: 0, fontSize: '1.1rem', fontWeight: '500' }}>Sold</p>
             </Card.Body>
           </Card>
         </Col>
       </Row>
       <Row>
-        <Col md={8}>
+        <Col>
           <Card className="dashboard-card">
             <Card.Header className="d-flex justify-content-between align-items-center">
               <h5 className="mb-0">Car Listings ({cars.length})</h5>
@@ -800,109 +774,6 @@ const AdminDashboard = () => {
                   </Button>
                 </div>
               )}
-            </Card.Body>
-          </Card>
-        </Col>
-        
-        <Col md={4}>
-          <Card className="dashboard-card mb-4">
-            <Card.Header>
-              <h5 className="mb-0">Quick Actions</h5>
-            </Card.Header>
-            <Card.Body>
-              <div className="d-grid gap-2">
-                <Button variant="primary" onClick={() => setShowAddModal(true)}>
-                  Add New Car
-                </Button>
-                <Button as={Link} to="/cars" variant="outline-primary">
-                  View All Cars
-                </Button>
-                <Button 
-                  variant="outline-success" 
-                  onClick={() => handleBulkStatusChange('available')}
-                  disabled={loading}
-                >
-                  Mark All Available
-                </Button>
-                <Button 
-                  variant="outline-warning" 
-                  onClick={() => handleBulkStatusChange('sold')}
-                  disabled={loading}
-                >
-                  Mark All Sold
-                </Button>
-                <Button variant="outline-secondary" disabled>
-                  Manage Users (Coming Soon)
-                </Button>
-                <Button variant="outline-info" disabled>
-                  View Analytics (Coming Soon)
-                </Button>
-              </div>
-            </Card.Body>
-          </Card>
-
-          <Card className="dashboard-card">
-            <Card.Header>
-              <h5 className="mb-0">Car Statistics</h5>
-            </Card.Header>
-            <Card.Body>
-              <div className="mb-3">
-                <div className="d-flex justify-content-between">
-                  <span>Active Cars:</span>
-                  <span className="fw-bold text-success">{stats.availableCars}</span>
-                </div>
-                <div className="progress mt-1" style={{ height: '8px' }}>
-                  <div 
-                    className="progress-bar bg-success" 
-                    style={{ width: `${stats.totalCars > 0 ? (stats.availableCars / stats.totalCars) * 100 : 0}%` }}
-                  ></div>
-                </div>
-              </div>
-              
-              <div className="mb-3">
-                <div className="d-flex justify-content-between">
-                  <span>Sold Cars:</span>
-                  <span className="fw-bold text-danger">{stats.soldCars}</span>
-                </div>
-                <div className="progress mt-1" style={{ height: '8px' }}>
-                  <div 
-                    className="progress-bar bg-danger" 
-                    style={{ width: `${stats.totalCars > 0 ? (stats.soldCars / stats.totalCars) * 100 : 0}%` }}
-                  ></div>
-                </div>
-              </div>
-
-              <div className="mb-3">
-                <div className="d-flex justify-content-between">
-                  <span>Pending Cars:</span>
-                  <span className="fw-bold text-warning">{stats.pendingCars}</span>
-                </div>
-                <div className="progress mt-1" style={{ height: '8px' }}>
-                  <div 
-                    className="progress-bar bg-warning" 
-                    style={{ width: `${stats.totalCars > 0 ? (stats.pendingCars / stats.totalCars) * 100 : 0}%` }}
-                  ></div>
-                </div>
-              </div>
-
-              <div className="mb-3">
-                <div className="d-flex justify-content-between">
-                  <span>Inactive Cars:</span>
-                  <span className="fw-bold text-secondary">{stats.inactiveCars}</span>
-                </div>
-                <div className="progress mt-1" style={{ height: '8px' }}>
-                  <div 
-                    className="progress-bar bg-secondary" 
-                    style={{ width: `${stats.totalCars > 0 ? (stats.inactiveCars / stats.totalCars) * 100 : 0}%` }}
-                  ></div>
-                </div>
-              </div>
-
-              <div className="text-center">
-                <small className="text-muted">
-                  Total: {stats.totalCars} cars
-                </small>
-              </div>
             </Card.Body>
           </Card>
         </Col>
