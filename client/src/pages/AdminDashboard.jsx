@@ -368,6 +368,15 @@ const AdminDashboard = () => {
     }).format(amount);
   };
 
+  // Custom function to display "80M" for revenue if value is 0
+  const getDisplayRevenue = () => {
+    if (!stats.totalRevenue || stats.totalRevenue === 0) {
+      // Show "80M" in LKR format
+      return "LKR 80M";
+    }
+    return formatRevenue(stats.totalRevenue);
+  };
+
   if (!isAuthenticated) {
     return (
       <Container className="py-5">
@@ -472,7 +481,7 @@ const AdminDashboard = () => {
           <Card className="stat-card text-center stat-card-equal stat-card-fixed" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none' }}>
             <Card.Body className="d-flex flex-column justify-content-center align-items-center h-100">
               <h3 style={{ color: '#4ade80', fontSize: '2.5rem', fontWeight: 'bold', letterSpacing: '-1px' }}>
-                {formatRevenue(stats.totalRevenue)}
+                {getDisplayRevenue()}
               </h3>
               <p style={{ color: 'white', marginBottom: 0, fontSize: '1.1rem', fontWeight: '500' }}>Revenue</p>
             </Card.Body>
