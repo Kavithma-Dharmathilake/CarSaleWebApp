@@ -396,50 +396,52 @@ const AdminDashboard = () => {
       
       {/* Statistics Cards */}
       <Row className="stats-grid">
-        <Col md={2}>
-          <Card className="stat-card text-center">
-            <Card.Body>
-              <h3 className="text-primary">{stats.totalCars}</h3>
+        <Col md={10}>
+          <Card className="stat-card text-center h-100">
+            <Card.Body className="py-4">
+              <h2 className="text-primary mb-2">{stats.totalCars}</h2>
               <p className="text-muted mb-0">Total Cars</p>
             </Card.Body>
           </Card>
         </Col>
-        <Col md={2}>
-          <Card className="stat-card text-center">
-            <Card.Body>
-              <h3 className="text-success">{stats.availableCars}</h3>
+        <Col md={10}>
+          <Card className="stat-card text-center h-100">
+            <Card.Body className="py-4">
+              <h2 className="text-success mb-2">{stats.availableCars}</h2>
               <p className="text-muted mb-0">Active</p>
             </Card.Body>
           </Card>
         </Col>
-        <Col md={2}>
-          <Card className="stat-card text-center">
-            <Card.Body>
-              <h3 className="text-danger">{stats.soldCars}</h3>
+        <Col md={10}>
+          <Card className="stat-card text-center h-100">
+            <Card.Body className="py-4">
+              <h2 className="text-danger mb-2">{stats.soldCars}</h2>
               <p className="text-muted mb-0">Sold</p>
             </Card.Body>
           </Card>
         </Col>
-        <Col md={2}>
-          <Card className="stat-card text-center">
-            <Card.Body>
-              <h3 className="text-warning">{stats.pendingCars}</h3>
+      </Row>
+      <Row className="stats-grid">
+        <Col md={10}>
+          <Card className="stat-card text-center h-100">
+            <Card.Body className="py-4">
+              <h2 className="text-warning mb-2">{stats.pendingCars}</h2>
               <p className="text-muted mb-0">Pending</p>
             </Card.Body>
           </Card>
         </Col>
-        <Col md={2}>
-          <Card className="stat-card text-center">
-            <Card.Body>
-              <h3 className="text-secondary">{stats.inactiveCars}</h3>
+        <Col md={10}>
+          <Card className="stat-card text-center h-100">
+            <Card.Body className="py-4">
+              <h2 className="text-secondary mb-2">{stats.inactiveCars}</h2>
               <p className="text-muted mb-0">Inactive</p>
             </Card.Body>
           </Card>
         </Col>
-        <Col md={2}>
-          <Card className="stat-card text-center">
-            <Card.Body>
-              <h3 className="text-info">{stats.totalUsers}</h3>
+        <Col md={10}>
+          <Card className="stat-card text-center h-100">
+            <Card.Body className="py-4">
+              <h2 className="text-info mb-2">{stats.totalUsers}</h2>
               <p className="text-muted mb-0">Total Users</p>
             </Card.Body>
           </Card>
