@@ -359,6 +359,15 @@ const AdminDashboard = () => {
     }
   };
 
+  // Revenue/Earnings formatting
+  const formatRevenue = (amount) => {
+    return new Intl.NumberFormat('en-LK', {
+      style: 'currency',
+      currency: 'LKR',
+      minimumFractionDigits: 0,
+    }).format(amount);
+  };
+
   if (!isAuthenticated) {
     return (
       <Container className="py-5">
@@ -434,28 +443,38 @@ const AdminDashboard = () => {
       </Row>
       
       {/* Statistics Cards */}
-      <Row className="stats-grid">
-        <Col md={4}>
-          <Card className="stat-card text-center" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none' }}>
-            <Card.Body>
+      <Row className="stats-grid justify-content-center" style={{ marginBottom: '2.5rem', gap: 0 }}>
+        <Col className="stat-col" xs={12} sm={6} md={3}>
+          <Card className="stat-card text-center stat-card-equal stat-card-fixed" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none' }}>
+            <Card.Body className="d-flex flex-column justify-content-center align-items-center h-100">
               <h3 style={{ color: '#4ade80', fontSize: '2.5rem', fontWeight: 'bold' }}>{stats.totalCars}</h3>
               <p style={{ color: 'white', marginBottom: 0, fontSize: '1.1rem', fontWeight: '500' }}>Total Cars</p>
             </Card.Body>
           </Card>
         </Col>
-        <Col md={4}>
-          <Card className="stat-card text-center" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none' }}>
-            <Card.Body>
+        <Col className="stat-col" xs={12} sm={6} md={3}>
+          <Card className="stat-card text-center stat-card-equal stat-card-fixed" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none' }}>
+            <Card.Body className="d-flex flex-column justify-content-center align-items-center h-100">
               <h3 style={{ color: '#4ade80', fontSize: '2.5rem', fontWeight: 'bold' }}>{stats.availableCars}</h3>
               <p style={{ color: 'white', marginBottom: 0, fontSize: '1.1rem', fontWeight: '500' }}>Active</p>
             </Card.Body>
           </Card>
         </Col>
-        <Col md={4}>
-          <Card className="stat-card text-center" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none' }}>
-            <Card.Body>
+        <Col className="stat-col" xs={12} sm={6} md={3}>
+          <Card className="stat-card text-center stat-card-equal stat-card-fixed" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none' }}>
+            <Card.Body className="d-flex flex-column justify-content-center align-items-center h-100">
               <h3 style={{ color: '#4ade80', fontSize: '2.5rem', fontWeight: 'bold' }}>{stats.soldCars}</h3>
               <p style={{ color: 'white', marginBottom: 0, fontSize: '1.1rem', fontWeight: '500' }}>Sold</p>
+            </Card.Body>
+          </Card>
+        </Col>
+        <Col className="stat-col" xs={12} sm={6} md={3}>
+          <Card className="stat-card text-center stat-card-equal stat-card-fixed" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none' }}>
+            <Card.Body className="d-flex flex-column justify-content-center align-items-center h-100">
+              <h3 style={{ color: '#4ade80', fontSize: '2.5rem', fontWeight: 'bold', letterSpacing: '-1px' }}>
+                {formatRevenue(stats.totalRevenue)}
+              </h3>
+              <p style={{ color: 'white', marginBottom: 0, fontSize: '1.1rem', fontWeight: '500' }}>Revenue</p>
             </Card.Body>
           </Card>
         </Col>
@@ -1324,6 +1343,57 @@ const AdminDashboard = () => {
         }
         .action-btn-solid:active, .action-btn-solid:focus {
           filter: brightness(0.97);
+        }
+        /* --- Make statistics cards same width and height --- */
+        .stat-card-equal {
+          min-height: 140px;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+        .stat-card-fixed {
+          width: 100%;
+          max-width: 260px;
+          min-width: 200px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .stat-col {
+          display: flex;
+          justify-content: center;
+          align-items: stretch;
+          padding-bottom: 1.5rem;
+        }
+        @media (max-width: 1199.98px) {
+          .stat-card-fixed {
+            max-width: 220px;
+            min-width: 160px;
+          }
+        }
+        @media (max-width: 991.98px) {
+          .stat-card-equal {
+            min-height: 120px;
+          }
+          .stat-card-fixed {
+            max-width: 100%;
+            min-width: 0;
+          }
+        }
+        @media (max-width: 767.98px) {
+          .stat-card-equal {
+            min-height: 100px;
+          }
+          .stat-col {
+            padding-bottom: 1rem;
+          }
+        }
+        .stats-grid {
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+        }
+        .stat-card-equal .card-body {
+          flex: 1 1 auto;
         }
       `}</style>
     </Container>
