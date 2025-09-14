@@ -45,4 +45,4 @@ This document will contain all the prompts that has been used through out this p
 
  >now create the fucntions of admindashboard.jsx. It should include a table with all the cars, whether they are avaiable or not with their relevant status. I need a button to add new car to the system. This button should be a popup where i can input carlisting details. ui for the pop up form needs to designed as well. consider the relevant backend api routes car for the bridge backend and frontend.
 
- >
+ 
