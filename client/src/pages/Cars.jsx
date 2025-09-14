@@ -163,28 +163,39 @@ const Cars = () => {
       {/* Cars Grid */}
       {!loading && cars.length > 0 && (
         <>
-          <Row className="car-grid">
+          <Row className="car-grid g-4">
             {cars.map(car => (
-              <Col key={car._id} md={6} lg={4} className="mb-4">
-                <Card className="car-card h-100">
+              <Col key={car._id} md={6} lg={4} xl={3} className="d-flex">
+                <Card className="car-card w-100">
                   <Card.Img 
                     variant="top" 
                     src={car.imageUrl} 
                     alt={car.title}
                     className="car-image"
+                    style={{ height: '200px', objectFit: 'cover' }}
                     onError={(e) => {
-                      e.target.src = 'https://via.placeholder.com/300x200?text=No+Image';
+                      e.target.src = 'https://images.unsplash.com/photo.jpg';
                     }}
                   />
                   <Card.Body className="d-flex flex-column">
-                    <Card.Title>{car.title}</Card.Title>
-                    <Card.Text>
-                      <strong>Make:</strong> {car.make}<br/>
-                      <strong>Model:</strong> {car.model}<br/>
-                      <strong>Year:</strong> {car.year}
-                      {car.mileage && <><br/><strong>Mileage:</strong> {car.mileage.toLocaleString()} km</>}
+                    <Card.Title className="car-title">{car.title}</Card.Title>
+                    <Card.Text className="car-details flex-grow-1">
+                      <div className="mb-2">
+                        <strong>Make:</strong> {car.make}
+                      </div>
+                      <div className="mb-2">
+                        <strong>Model:</strong> {car.model}
+                      </div>
+                      <div className="mb-2">
+                        <strong>Year:</strong> {car.year}
+                      </div>
+                      {car.mileage && (
+                        <div className="mb-2">
+                          <strong>Mileage:</strong> {car.mileage.toLocaleString()} km
+                        </div>
+                      )}
                     </Card.Text>
-                    <div className="mt-auto">
+                    <div className="car-footer">
                       <div className="car-price mb-3">
                         {formatPrice(car.price)}
                       </div>

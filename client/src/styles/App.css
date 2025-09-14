@@ -37,9 +37,6 @@
 
 /* Car Grid */
 .car-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
   margin: 2rem 0;
 }
 
@@ -47,6 +44,12 @@
 .car-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e9ecef;
+  border-radius: 0.5rem;
+  overflow: hidden;
 }
 
 .car-card:hover {
@@ -57,13 +60,73 @@
 .car-image {
   height: 200px;
   object-fit: cover;
-  border-radius: 0.375rem 0.375rem 0 0;
+  border-radius: 0;
+  width: 100%;
+}
+
+.car-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+  color: #333;
+}
+
+.car-details {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+.car-footer {
+  margin-top: auto;
+  padding-top: 1rem;
 }
 
 .car-price {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: bold;
   color: #28a745;
+  text-align: center;
+}
+
+/* Ensure consistent card heights */
+.car-card .card-body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 1.25rem;
+}
+
+.car-card .card-text {
+  flex-grow: 1;
+  margin-bottom: 0;
+}
+
+/* Responsive adjustments for car cards */
+@media (max-width: 768px) {
+  .car-card {
+    margin-bottom: 1.5rem;
+  }
+  
+  .car-title {
+    font-size: 1rem;
+  }
+  
+  .car-details {
+    font-size: 0.85rem;
+  }
+  
+  .car-price {
+    font-size: 1.2rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .car-grid .col-xl-3 {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
 }
 
 /* Search and Filter */
