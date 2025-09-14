@@ -57,7 +57,7 @@ const Login = () => {
             
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3">
-                <Form.Label>Email Address</Form.Label>
+                <Form.Label className="text-start fw-bold">Email Address</Form.Label>
                 <Form.Control
                   type="email"
                   name="email"
@@ -69,7 +69,7 @@ const Login = () => {
               </Form.Group>
               
               <Form.Group className="mb-3">
-                <Form.Label>Password</Form.Label>
+                <Form.Label className="text-start fw-bold">Password</Form.Label>
                 <Form.Control
                   type="password"
                   name="password"

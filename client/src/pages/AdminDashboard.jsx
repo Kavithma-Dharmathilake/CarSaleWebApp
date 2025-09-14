@@ -395,7 +395,7 @@ const AdminDashboard = () => {
       </Row>
       
       {/* Statistics Cards */}
-      <Row className="stats-grid">
+      {/* <Row className="stats-grid">
         <Col md={10}>
           <Card className="stat-card text-center h-100">
             <Card.Body className="py-4">
@@ -446,7 +446,7 @@ const AdminDashboard = () => {
             </Card.Body>
           </Card>
         </Col>
-      </Row>
+      </Row> */}
       <Row>
         <Col md={8}>
           <Card className="dashboard-card">
