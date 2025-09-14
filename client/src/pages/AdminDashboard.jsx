@@ -448,7 +448,7 @@ const AdminDashboard = () => {
         </Col>
       </Row> */}
       <Row>
-        <Col md={8}>
+        <Col md={12}>
           <Card className="dashboard-card">
             <Card.Header className="d-flex justify-content-between align-items-center">
               <h5 className="mb-0">Car Listings ({cars.length})</h5>
@@ -637,109 +637,6 @@ const AdminDashboard = () => {
                   </Button>
                 </div>
               )}
-            </Card.Body>
-          </Card>
-        </Col>
-        
-        <Col md={4}>
-          <Card className="dashboard-card mb-4">
-            <Card.Header>
-              <h5 className="mb-0">Quick Actions</h5>
-            </Card.Header>
-            <Card.Body>
-              <div className="d-grid gap-2">
-                <Button variant="primary" onClick={() => setShowAddModal(true)}>
-                  Add New Car
-                </Button>
-                <Button as={Link} to="/cars" variant="outline-primary">
-                  View All Cars
-                </Button>
-                <Button 
-                  variant="outline-success" 
-                  onClick={() => handleBulkStatusChange('available')}
-                  disabled={loading}
-                >
-                  Mark All Available
-                </Button>
-                <Button 
-                  variant="outline-warning" 
-                  onClick={() => handleBulkStatusChange('sold')}
-                  disabled={loading}
-                >
-                  Mark All Sold
-                </Button>
-                <Button variant="outline-secondary" disabled>
-                  Manage Users (Coming Soon)
-                </Button>
-                <Button variant="outline-info" disabled>
-                  View Analytics (Coming Soon)
-                </Button>
-              </div>
-            </Card.Body>
-          </Card>
-
-          <Card className="dashboard-card">
-            <Card.Header>
-              <h5 className="mb-0">Car Statistics</h5>
-            </Card.Header>
-            <Card.Body>
-              <div className="mb-3">
-                <div className="d-flex justify-content-between">
-                  <span>Active Cars:</span>
-                  <span className="fw-bold text-success">{stats.availableCars}</span>
-                </div>
-                <div className="progress mt-1" style={{ height: '8px' }}>
-                  <div 
-                    className="progress-bar bg-success" 
-                    style={{ width: `${stats.totalCars > 0 ? (stats.availableCars / stats.totalCars) * 100 : 0}%` }}
-                  ></div>
-                </div>
-              </div>
-              
-              <div className="mb-3">
-                <div className="d-flex justify-content-between">
-                  <span>Sold Cars:</span>
-                  <span className="fw-bold text-danger">{stats.soldCars}</span>
-                </div>
-                <div className="progress mt-1" style={{ height: '8px' }}>
-                  <div 
-                    className="progress-bar bg-danger" 
-                    style={{ width: `${stats.totalCars > 0 ? (stats.soldCars / stats.totalCars) * 100 : 0}%` }}
-                  ></div>
-                </div>
-              </div>
-
-              <div className="mb-3">
-                <div className="d-flex justify-content-between">
-                  <span>Pending Cars:</span>
-                  <span className="fw-bold text-warning">{stats.pendingCars}</span>
-                </div>
-                <div className="progress mt-1" style={{ height: '8px' }}>
-                  <div 
-                    className="progress-bar bg-warning" 
-                    style={{ width: `${stats.totalCars > 0 ? (stats.pendingCars / stats.totalCars) * 100 : 0}%` }}
-                  ></div>
-                </div>
-              </div>
-
-              <div className="mb-3">
-                <div className="d-flex justify-content-between">
-                  <span>Inactive Cars:</span>
-                  <span className="fw-bold text-secondary">{stats.inactiveCars}</span>
-                </div>
-                <div className="progress mt-1" style={{ height: '8px' }}>
-                  <div 
-                    className="progress-bar bg-secondary" 
-                    style={{ width: `${stats.totalCars > 0 ? (stats.inactiveCars / stats.totalCars) * 100 : 0}%` }}
-                  ></div>
-                </div>
-              </div>
-
-              <div className="text-center">
-                <small className="text-muted">
-                  Total: {stats.totalCars} cars
-                </small>
-              </div>
             </Card.Body>
           </Card>
         </Col>
