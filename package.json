@@ -1,0 +1,18 @@
+{
+  "name": "car-sales-app",
+  "version": "1.0.0",
+  "description": "Car Sales Web Application - MERN Stack",
+  "main": "server/server.js",
+  "scripts": {
+    "dev": "cd server && npm run dev",
+    "server": "cd server && npm run dev",
+    "start": "cd server && npm start",
+    "install-server": "cd server && npm install"
+  },
+  "keywords": ["car-sales", "mern", "react", "nodejs", "mongodb"],
+  "author": "Kavithma, Roshana, Zahrun",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
