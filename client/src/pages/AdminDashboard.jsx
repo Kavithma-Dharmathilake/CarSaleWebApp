@@ -1,14 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Table, Spinner, Alert, Badge, Modal, Form } from 'react-bootstrap';
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Button,
+  Table,
+  Spinner,
+  Alert,
+  Badge,
+  Modal,
+  Form,
+  OverlayTrigger,
+  Tooltip,
+} from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCar } from '../context/CarContext';
 import { useTransaction } from '../context/TransactionContext';
 
+const STATUS_COLORS = {
+  active: { bg: 'success', text: 'Active', color: '#22c55e' },
+  sold: { bg: 'danger', text: 'Sold', color: '#ef4444' },
+  pending: { bg: 'warning', text: 'Pending', color: '#f59e42' },
+  inactive: { bg: 'secondary', text: 'Inactive', color: '#64748b' },
+};
+
 const AdminDashboard = () => {
   const { user, isAuthenticated, isAdmin } = useAuth();
   const navigate = useNavigate();
-  
+
   const {
     cars,
     loading: carsLoading,
@@ -17,14 +38,14 @@ const AdminDashboard = () => {
     createCar,
     updateCar,
     deleteCar,
-    clearError: clearCarError
+    clearError: clearCarError,
   } = useCar();
 
   const {
     getAllTransactions,
     transactionStats,
     loading: transactionsLoading,
-    error: transactionsError
+    error: transactionsError,
   } = useTransaction();
 
   const [stats, setStats] = useState({
@@ -35,7 +56,7 @@ const AdminDashboard = () => {
     inactiveCars: 0,
     totalUsers: 0,
     totalSales: 0,
-    totalRevenue: 0
+    totalRevenue: 0,
   });
 
   const [showAddModal, setShowAddModal] = useState(false);
@@ -59,12 +80,12 @@ const AdminDashboard = () => {
     features: [],
     location: {
       city: '',
-      district: ''
+      district: '',
     },
     contactInfo: {
       phone: '',
-      email: ''
-    }
+      email: '',
+    },
   });
 
   // Redirect if not admin
@@ -86,7 +107,7 @@ const AdminDashboard = () => {
     try {
       await Promise.all([
         fetchCars({ limit: 100 }), // Load more cars for admin view
-        loadTransactionStats()
+        loadTransactionStats(),
       ]);
     } finally {
       setLoading(false);
@@ -96,18 +117,22 @@ const AdminDashboard = () => {
   const loadTransactionStats = async () => {
     try {
       // Calculate stats from loaded cars
-      const availableCars = cars.filter(car => car.isAvailable && car.status === 'active').length;
-      const soldCars = cars.filter(car => !car.isAvailable || car.status === 'sold').length;
-      const pendingCars = cars.filter(car => car.status === 'pending').length;
-      const inactiveCars = cars.filter(car => car.status === 'inactive').length;
-      
-      setStats(prev => ({
+      const availableCars = cars.filter(
+        (car) => car.isAvailable && car.status === 'active'
+      ).length;
+      const soldCars = cars.filter(
+        (car) => !car.isAvailable || car.status === 'sold'
+      ).length;
+      const pendingCars = cars.filter((car) => car.status === 'pending').length;
+      const inactiveCars = cars.filter((car) => car.status === 'inactive').length;
+
+      setStats((prev) => ({
         ...prev,
         totalCars: cars.length,
         availableCars,
         soldCars,
         pendingCars,
-        inactiveCars
+        inactiveCars,
       }));
     } catch (error) {
       console.error('Error loading stats:', error);
@@ -124,39 +149,42 @@ const AdminDashboard = () => {
   // Handle form input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    
+
     if (name.startsWith('location.')) {
       const field = name.split('.')[1];
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         location: {
           ...prev.location,
-          [field]: value
-        }
+          [field]: value,
+        },
       }));
     } else if (name.startsWith('contactInfo.')) {
       const field = name.split('.')[1];
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         contactInfo: {
           ...prev.contactInfo,
-          [field]: value
-        }
+          [field]: value,
+        },
       }));
     } else {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        [name]: value
+        [name]: value,
       }));
     }
   };
 
   // Handle features input
   const handleFeaturesChange = (e) => {
-    const features = e.target.value.split(',').map(f => f.trim()).filter(f => f);
-    setFormData(prev => ({
+    const features = e.target.value
+      .split(',')
+      .map((f) => f.trim())
+      .filter((f) => f);
+    setFormData((prev) => ({
       ...prev,
-      features
+      features,
     }));
   };
 
@@ -196,7 +224,7 @@ const AdminDashboard = () => {
   const handleToggleAvailability = async (car) => {
     const updatedData = {
       ...car,
-      isAvailable: !car.isAvailable
+      isAvailable: !car.isAvailable,
     };
     const result = await updateCar(car._id, updatedData);
     if (result.success) {
@@ -208,7 +236,7 @@ const AdminDashboard = () => {
   const handleStatusChange = async (car, newStatus) => {
     const updatedData = {
       ...car,
-      status: newStatus
+      status: newStatus,
     };
     const result = await updateCar(car._id, updatedData);
     if (result.success) {
@@ -222,7 +250,7 @@ const AdminDashboard = () => {
     try {
       // This would typically be a bulk update API call
       // For now, we'll update each car individually
-      const promises = cars.map(car => 
+      const promises = cars.map((car) =>
         updateCar(car._id, { ...car, isAvailable: status === 'available' })
       );
       await Promise.all(promises);
@@ -251,12 +279,12 @@ const AdminDashboard = () => {
       features: [],
       location: {
         city: '',
-        district: ''
+        district: '',
       },
       contactInfo: {
         phone: '',
-        email: ''
-      }
+        email: '',
+      },
     });
   };
 
@@ -278,12 +306,12 @@ const AdminDashboard = () => {
       features: car.features || [],
       location: {
         city: car.location?.city || '',
-        district: car.location?.district || ''
+        district: car.location?.district || '',
       },
       contactInfo: {
         phone: car.contactInfo?.phone || '',
-        email: car.contactInfo?.email || ''
-      }
+        email: car.contactInfo?.email || '',
+      },
     });
     setShowEditModal(true);
   };
@@ -299,7 +327,7 @@ const AdminDashboard = () => {
     return new Intl.NumberFormat('en-LK', {
       style: 'currency',
       currency: 'LKR',
-      minimumFractionDigits: 0
+      minimumFractionDigits: 0,
     }).format(price);
   };
 
@@ -308,47 +336,26 @@ const AdminDashboard = () => {
     return new Date(dateString).toLocaleDateString('en-LK', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
 
-  // Get car status badge variant
+  // Get car status badge color and text
   const getCarStatusBadge = (car) => {
     if (!car.isAvailable) {
-      return 'danger'; // Sold
+      return STATUS_COLORS.sold;
     }
-    
     switch (car.status) {
       case 'active':
-        return 'success';
+        return STATUS_COLORS.active;
       case 'pending':
-        return 'warning';
+        return STATUS_COLORS.pending;
       case 'inactive':
-        return 'secondary';
+        return STATUS_COLORS.inactive;
       case 'sold':
-        return 'danger';
+        return STATUS_COLORS.sold;
       default:
-        return 'info';
-    }
-  };
-
-  // Get car status text
-  const getCarStatusText = (car) => {
-    if (!car.isAvailable) {
-      return 'Sold';
-    }
-    
-    switch (car.status) {
-      case 'active':
-        return 'Active';
-      case 'pending':
-        return 'Pending';
-      case 'inactive':
-        return 'Inactive';
-      case 'sold':
-        return 'Sold';
-      default:
-        return 'Unknown';
+        return { bg: 'info', text: 'Unknown', color: '#38bdf8' };
     }
   };
 
@@ -383,6 +390,38 @@ const AdminDashboard = () => {
     );
   }
 
+  // --- Custom styles for the modern table ---
+  const tableStyles = {
+    boxShadow: '0 4px 24px 0 rgba(30,41,59,0.08)',
+    borderRadius: '1rem',
+    overflow: 'hidden',
+    background: '#fff',
+    marginBottom: '2rem',
+  };
+  const thStyles = {
+    position: 'sticky',
+    top: 0,
+    background: '#f8fafc',
+    zIndex: 2,
+    fontWeight: 600,
+    color: '#334155',
+    borderBottom: '2px solid #e2e8f0',
+    fontSize: '1rem',
+    letterSpacing: '0.01em',
+  };
+  const tdStyles = {
+    verticalAlign: 'middle',
+    fontSize: '0.98rem',
+    border: 'none',
+    background: 'transparent',
+  };
+  const zebraRow = (idx) =>
+    idx % 2 === 0
+      ? { background: '#f9fafb', transition: 'background 0.2s' }
+      : { background: '#fff', transition: 'background 0.2s' };
+
+  // --- End custom styles ---
+
   return (
     <Container className="py-5">
       <Row>
@@ -393,95 +432,18 @@ const AdminDashboard = () => {
           </p>
         </Col>
       </Row>
-      
-      {/* Statistics Cards */}
-      <Row className="stats-grid">
-        <Col md={10}>
-          <Card className="stat-card text-center h-100">
-            <Card.Body className="py-4">
-              <h2 className="text-primary mb-2">{stats.totalCars}</h2>
-              <p className="text-muted mb-0">Total Cars</p>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={10}>
-          <Card className="stat-card text-center h-100">
-            <Card.Body className="py-4">
-              <h2 className="text-success mb-2">{stats.availableCars}</h2>
-              <p className="text-muted mb-0">Active</p>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={10}>
-          <Card className="stat-card text-center h-100">
-            <Card.Body className="py-4">
-              <h2 className="text-danger mb-2">{stats.soldCars}</h2>
-              <p className="text-muted mb-0">Sold</p>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-      <Row className="stats-grid">
-        <Col md={10}>
-          <Card className="stat-card text-center h-100">
-            <Card.Body className="py-4">
-              <h2 className="text-warning mb-2">{stats.pendingCars}</h2>
-              <p className="text-muted mb-0">Pending</p>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={10}>
-          <Card className="stat-card text-center h-100">
-            <Card.Body className="py-4">
-              <h2 className="text-secondary mb-2">{stats.inactiveCars}</h2>
-              <p className="text-muted mb-0">Inactive</p>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={10}>
-          <Card className="stat-card text-center h-100">
-            <Card.Body className="py-4">
-              <h2 className="text-info mb-2">{stats.totalUsers}</h2>
-              <p className="text-muted mb-0">Total Users</p>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+
+      {/* Car Listings Table Only (No Stats Cards, No Quick Actions) */}
       <Row>
         <Col md={8}>
-          <Card className="dashboard-card">
-            <Card.Header className="d-flex justify-content-between align-items-center">
+          <Card className="dashboard-card" style={{ boxShadow: '0 4px 24px 0 rgba(30,41,59,0.08)', borderRadius: '1rem' }}>
+            <Card.Header className="d-flex justify-content-between align-items-center bg-white border-0" style={{ borderTopLeftRadius: '1rem', borderTopRightRadius: '1rem', boxShadow: '0 1px 0 0 #e2e8f0' }}>
               <h5 className="mb-0">Car Listings ({cars.length})</h5>
-              <div className="d-flex gap-2">
-                <Button 
-                  variant="outline-success" 
-                  size="sm"
-                  onClick={() => handleBulkStatusChange('available')}
-                  disabled={loading}
-                >
-                  Mark All Available
-                </Button>
-                <Button 
-                  variant="outline-warning" 
-                  size="sm"
-                  onClick={() => handleBulkStatusChange('sold')}
-                  disabled={loading}
-                >
-                  Mark All Sold
-                </Button>
-                <Button 
-                  variant="primary" 
-                  size="sm"
-                  onClick={() => setShowAddModal(true)}
-                >
-                  Add New Car
-                </Button>
-              </div>
             </Card.Header>
-            <Card.Body>
+            <Card.Body style={{ padding: 0 }}>
               {/* Error Display */}
               {carsError && (
-                <Alert variant="danger" dismissible onClose={clearCarError}>
+                <Alert variant="danger" dismissible onClose={clearCarError} className="m-3">
                   {carsError}
                 </Alert>
               )}
@@ -496,136 +458,285 @@ const AdminDashboard = () => {
 
               {/* Cars Table */}
               {!carsLoading && !loading && cars.length > 0 && (
-                <Table responsive hover>
-                  <thead>
-                    <tr>
-                      <th>Car Details</th>
-                      <th>Make/Model</th>
-                      <th>Year</th>
-                      <th>Price</th>
-                      <th>Status</th>
-                      <th>Views</th>
-                      <th>Created</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {cars.map(car => (
-                      <tr key={car._id} className={!car.isAvailable ? 'table-secondary' : ''}>
-                        <td>
-                          <div className="d-flex align-items-center">
-                            <img 
-                              src={car.imageUrl || 'https://images.unsplash.com/photo.jpg'} 
-                              alt={car.title}
-                              className="me-2 rounded"
-                              style={{ width: '60px', height: '40px', objectFit: 'cover' }}
-                              onError={(e) => {
-                                e.target.src = 'https://images.unsplash.com/photo.jpg';
-                              }}
-                            />
-                            <div>
-                              <div className="fw-bold small">{car.title}</div>
-                              <div className="text-muted small">
-                                {car.location?.city && car.location?.district 
-                                  ? `${car.location.city}, ${car.location.district}`
-                                  : 'Location not specified'
-                                }
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <div className="fw-bold">{car.make}</div>
-                          <div className="text-muted small">{car.model}</div>
-                        </td>
-                        <td>
-                          <span className="badge bg-light text-dark">{car.year}</span>
-                        </td>
-                        <td>
-                          <div className="fw-bold text-success">{formatPrice(car.price)}</div>
-                          {car.mileage && (
-                            <div className="text-muted small">{car.mileage.toLocaleString()} km</div>
-                          )}
-                        </td>
-                        <td>
-                          <div className="d-flex flex-column gap-1">
-                            <Badge bg={getCarStatusBadge(car)} className="w-100">
-                              {getCarStatusText(car)}
-                            </Badge>
-                            <div className="d-flex gap-1">
-                              <Button 
-                                variant="outline-primary"
-                                size="sm"
-                                onClick={() => handleToggleAvailability(car)}
-                                disabled={loading}
-                                title={car.isAvailable ? 'Mark as Sold' : 'Mark as Available'}
-                              >
-                                {car.isAvailable ? 'Mark Sold' : 'Mark Available'}
-                              </Button>
-                              {car.status !== 'active' && car.isAvailable && (
-                                <Button 
-                                  variant="outline-success"
-                                  size="sm"
-                                  onClick={() => handleStatusChange(car, 'active')}
-                                  disabled={loading}
-                                  title="Mark as Active"
-                                >
-                                  Activate
-                                </Button>
-                              )}
-                              {car.status === 'active' && car.isAvailable && (
-                                <Button 
-                                  variant="outline-warning"
-                                  size="sm"
-                                  onClick={() => handleStatusChange(car, 'inactive')}
-                                  disabled={loading}
-                                  title="Mark as Inactive"
-                                >
-                                  Deactivate
-                                </Button>
-                              )}
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <span className="badge bg-info">{car.views || 0}</span>
-                        </td>
-                        <td className="small">
-                          <div>{formatDate(car.createdAt)}</div>
-                          {car.updatedAt !== car.createdAt && (
-                            <div className="text-muted">Updated: {formatDate(car.updatedAt)}</div>
-                          )}
-                        </td>
-                        <td>
-                          <div className="d-flex flex-column gap-1">
-                            <Button 
-                              variant="outline-primary" 
-                              size="sm"
-                              onClick={() => openEditModal(car)}
-                            >
-                              Edit
-                            </Button>
-                            <Button 
-                              variant="outline-info" 
-                              size="sm"
-                              as={Link}
-                              to={`/cars/${car._id}`}
-                            >
-                              View
-                            </Button>
-                            <Button 
-                              variant="outline-danger" 
-                              size="sm"
-                              onClick={() => openDeleteModal(car)}
-                            >
-                              Delete
-                            </Button>
-                          </div>
-                        </td>
+                <div style={tableStyles} className="table-responsive">
+                  <Table
+                    hover
+                    className="mb-0"
+                    style={{
+                      minWidth: 900,
+                      borderCollapse: 'separate',
+                      borderSpacing: 0,
+                    }}
+                  >
+                    <thead>
+                      <tr>
+                        <th style={thStyles}>Car Details</th>
+                        <th style={thStyles}>Make/Model</th>
+                        <th style={thStyles}>Year</th>
+                        <th style={thStyles}>Price</th>
+                        <th style={thStyles}>Status</th>
+                        <th style={thStyles}>Views</th>
+                        <th style={thStyles}>Created</th>
+                        <th style={thStyles}>Actions</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                    </thead>
+                    <tbody>
+                      {cars.map((car, idx) => {
+                        const status = getCarStatusBadge(car);
+                        return (
+                          <tr
+                            key={car._id}
+                            style={{
+                              ...zebraRow(idx),
+                              transition: 'background 0.2s',
+                              cursor: 'pointer',
+                            }}
+                            className="car-row"
+                          >
+                            <td style={tdStyles}>
+                              <div className="d-flex align-items-center">
+                                <img
+                                  src={car.imageUrl || 'https://images.unsplash.com/photo.jpg'}
+                                  alt={car.title}
+                                  className="me-3"
+                                  style={{
+                                    width: 64,
+                                    height: 44,
+                                    objectFit: 'cover',
+                                    borderRadius: '0.75rem',
+                                    boxShadow: '0 2px 8px 0 rgba(30,41,59,0.10)',
+                                    border: '1px solid #e2e8f0',
+                                    background: '#f1f5f9',
+                                  }}
+                                  onError={(e) => {
+                                    e.target.src = 'https://images.unsplash.com/photo.jpg';
+                                  }}
+                                />
+                                <div>
+                                  <div className="fw-semibold" style={{ fontSize: '1.05rem', color: '#0f172a' }}>
+                                    {car.title}
+                                  </div>
+                                  <div className="text-muted small">
+                                    {car.location?.city && car.location?.district
+                                      ? `${car.location.city}, ${car.location.district}`
+                                      : 'Location not specified'}
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td style={tdStyles}>
+                              <div className="fw-bold" style={{ color: '#334155' }}>{car.make}</div>
+                              <div className="text-muted small">{car.model}</div>
+                            </td>
+                            <td style={tdStyles}>
+                              <span className="badge bg-light text-dark" style={{ fontWeight: 500, fontSize: '1rem', borderRadius: '0.5rem' }}>
+                                {car.year}
+                              </span>
+                            </td>
+                            <td style={tdStyles}>
+                              <div className="fw-bold" style={{ color: '#22c55e', fontSize: '1.1rem', background: '#f0fdf4', borderRadius: '0.5rem', padding: '0.25em 0.75em', display: 'inline-block' }}>
+                                {formatPrice(car.price)}
+                              </div>
+                              {car.mileage && (
+                                <div className="text-muted small mt-1">{car.mileage.toLocaleString()} km</div>
+                              )}
+                            </td>
+                            <td style={tdStyles}>
+                              <div className="d-flex flex-column gap-1 align-items-center">
+                                <Badge
+                                  bg={status.bg}
+                                  style={{
+                                    width: 90,
+                                    fontSize: '0.98rem',
+                                    fontWeight: 600,
+                                    borderRadius: '0.5rem',
+                                    background: status.bg === 'success'
+                                      ? 'linear-gradient(90deg,#4ade80 0%,#22d3ee 100%)'
+                                      : status.bg === 'danger'
+                                      ? 'linear-gradient(90deg,#f87171 0%,#fbbf24 100%)'
+                                      : status.bg === 'warning'
+                                      ? 'linear-gradient(90deg,#fbbf24 0%,#f59e42 100%)'
+                                      : status.bg === 'secondary'
+                                      ? 'linear-gradient(90deg,#cbd5e1 0%,#64748b 100%)'
+                                      : undefined,
+                                    color: status.bg === 'warning' ? '#fff' : '#fff',
+                                    boxShadow: '0 1px 4px 0 rgba(30,41,59,0.10)',
+                                  }}
+                                >
+                                  {status.text}
+                                </Badge>
+                                <div className="d-flex gap-1 mt-1 flex-wrap justify-content-center">
+                                  <OverlayTrigger
+                                    placement="top"
+                                    overlay={
+                                      <Tooltip>
+                                        {car.isAvailable ? 'Mark as Sold' : 'Mark as Available'}
+                                      </Tooltip>
+                                    }
+                                  >
+                                    <Button
+                                      variant={car.isAvailable ? "info" : "success"}
+                                      size="sm"
+                                      onClick={() => handleToggleAvailability(car)}
+                                      disabled={loading}
+                                      className={`action-btn-solid ${car.isAvailable ? "action-btn-mark-sold" : "action-btn-mark-available"}`}
+                                      style={{
+                                        borderRadius: '0.5rem',
+                                        fontWeight: 700,
+                                        minWidth: 120,
+                                        boxShadow: '0 1px 2px 0 #e2e8f0',
+                                        color: '#fff',
+                                        border: 'none',
+                                      }}
+                                    >
+                                      {car.isAvailable ? 'Mark Sold' : 'Mark Available'}
+                                    </Button>
+                                  </OverlayTrigger>
+                                  {car.status !== 'active' && car.isAvailable && (
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={<Tooltip>Mark as Active</Tooltip>}
+                                    >
+                                      <Button
+                                        variant="success"
+                                        size="sm"
+                                        onClick={() => handleStatusChange(car, 'active')}
+                                        disabled={loading}
+                                        className="action-btn-solid action-btn-activate"
+                                        style={{
+                                          borderRadius: '0.5rem',
+                                          fontWeight: 700,
+                                          minWidth: 120,
+                                          boxShadow: '0 1px 2px 0 #e2e8f0',
+                                          color: '#fff',
+                                          border: 'none',
+                                        }}
+                                      >
+                                        Activate
+                                      </Button>
+                                    </OverlayTrigger>
+                                  )}
+                                  {car.status === 'active' && car.isAvailable && (
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={<Tooltip>Mark as Inactive</Tooltip>}
+                                    >
+                                      <Button
+                                        variant="danger"
+                                        size="sm"
+                                        onClick={() => handleStatusChange(car, 'inactive')}
+                                        disabled={loading}
+                                        className="action-btn-solid action-btn-deactivate"
+                                        style={{
+                                          borderRadius: '0.5rem',
+                                          fontWeight: 700,
+                                          minWidth: 120,
+                                          boxShadow: '0 1px 2px 0 #e2e8f0',
+                                          color: '#fff',
+                                          border: 'none',
+                                        }}
+                                      >
+                                        Deactivate
+                                      </Button>
+                                    </OverlayTrigger>
+                                  )}
+                                </div>
+                              </div>
+                            </td>
+                            <td style={tdStyles}>
+                              <span
+                                className="badge"
+                                style={{
+                                  background: 'linear-gradient(90deg,#38bdf8 0%,#818cf8 100%)',
+                                  color: '#fff',
+                                  fontWeight: 600,
+                                  fontSize: '1rem',
+                                  borderRadius: '0.5rem',
+                                  minWidth: 40,
+                                }}
+                              >
+                                {car.views || 0}
+                              </span>
+                            </td>
+                            <td style={tdStyles} className="small">
+                              <div>{formatDate(car.createdAt)}</div>
+                              {car.updatedAt !== car.createdAt && (
+                                <div className="text-muted" style={{ fontSize: '0.85em' }}>
+                                  Updated: {formatDate(car.updatedAt)}
+                                </div>
+                              )}
+                            </td>
+                            <td style={tdStyles}>
+                              <div className="d-flex flex-column gap-1 align-items-center">
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={<Tooltip>Edit Car</Tooltip>}
+                                >
+                                  <Button
+                                    variant="outline-primary"
+                                    size="sm"
+                                    onClick={() => openEditModal(car)}
+                                    style={{
+                                      borderRadius: '0.5rem',
+                                      fontWeight: 500,
+                                      minWidth: 80,
+                                      transition: 'background 0.2s, color 0.2s, box-shadow 0.2s',
+                                      boxShadow: '0 1px 2px 0 #e2e8f0',
+                                    }}
+                                    className="action-btn"
+                                  >
+                                    Edit
+                                  </Button>
+                                </OverlayTrigger>
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={<Tooltip>View Car</Tooltip>}
+                                >
+                                  <Button
+                                    variant="outline-info"
+                                    size="sm"
+                                    as={Link}
+                                    to={`/cars/${car._id}`}
+                                    style={{
+                                      borderRadius: '0.5rem',
+                                      fontWeight: 500,
+                                      minWidth: 80,
+                                      transition: 'background 0.2s, color 0.2s, box-shadow 0.2s',
+                                      boxShadow: '0 1px 2px 0 #e2e8f0',
+                                    }}
+                                    className="action-btn"
+                                  >
+                                    View
+                                  </Button>
+                                </OverlayTrigger>
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={<Tooltip>Delete Car</Tooltip>}
+                                >
+                                  <Button
+                                    variant="outline-danger"
+                                    size="sm"
+                                    onClick={() => openDeleteModal(car)}
+                                    style={{
+                                      borderRadius: '0.5rem',
+                                      fontWeight: 500,
+                                      minWidth: 80,
+                                      transition: 'background 0.2s, color 0.2s, box-shadow 0.2s',
+                                      boxShadow: '0 1px 2px 0 #e2e8f0',
+                                    }}
+                                    className="action-btn"
+                                  >
+                                    Delete
+                                  </Button>
+                                </OverlayTrigger>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </Table>
+                </div>
               )}
 
               {/* No Cars */}
@@ -640,44 +751,8 @@ const AdminDashboard = () => {
             </Card.Body>
           </Card>
         </Col>
-        
-        <Col md={4}>
-          <Card className="dashboard-card mb-4">
-            <Card.Header>
-              <h5 className="mb-0">Quick Actions</h5>
-            </Card.Header>
-            <Card.Body>
-              <div className="d-grid gap-2">
-                <Button variant="primary" onClick={() => setShowAddModal(true)}>
-                  Add New Car
-                </Button>
-                <Button as={Link} to="/cars" variant="outline-primary">
-                  View All Cars
-                </Button>
-                <Button 
-                  variant="outline-success" 
-                  onClick={() => handleBulkStatusChange('available')}
-                  disabled={loading}
-                >
-                  Mark All Available
-                </Button>
-                <Button 
-                  variant="outline-warning" 
-                  onClick={() => handleBulkStatusChange('sold')}
-                  disabled={loading}
-                >
-                  Mark All Sold
-                </Button>
-                <Button variant="outline-secondary" disabled>
-                  Manage Users (Coming Soon)
-                </Button>
-                <Button variant="outline-info" disabled>
-                  View Analytics (Coming Soon)
-                </Button>
-              </div>
-            </Card.Body>
-          </Card>
 
+        <Col md={4}>
           <Card className="dashboard-card">
             <Card.Header>
               <h5 className="mb-0">Car Statistics</h5>
@@ -689,22 +764,34 @@ const AdminDashboard = () => {
                   <span className="fw-bold text-success">{stats.availableCars}</span>
                 </div>
                 <div className="progress mt-1" style={{ height: '8px' }}>
-                  <div 
-                    className="progress-bar bg-success" 
-                    style={{ width: `${stats.totalCars > 0 ? (stats.availableCars / stats.totalCars) * 100 : 0}%` }}
+                  <div
+                    className="progress-bar bg-success"
+                    style={{
+                      width: `${
+                        stats.totalCars > 0
+                          ? (stats.availableCars / stats.totalCars) * 100
+                          : 0
+                      }%`,
+                    }}
                   ></div>
                 </div>
               </div>
-              
+
               <div className="mb-3">
                 <div className="d-flex justify-content-between">
                   <span>Sold Cars:</span>
                   <span className="fw-bold text-danger">{stats.soldCars}</span>
                 </div>
                 <div className="progress mt-1" style={{ height: '8px' }}>
-                  <div 
-                    className="progress-bar bg-danger" 
-                    style={{ width: `${stats.totalCars > 0 ? (stats.soldCars / stats.totalCars) * 100 : 0}%` }}
+                  <div
+                    className="progress-bar bg-danger"
+                    style={{
+                      width: `${
+                        stats.totalCars > 0
+                          ? (stats.soldCars / stats.totalCars) * 100
+                          : 0
+                      }%`,
+                    }}
                   ></div>
                 </div>
               </div>
@@ -715,9 +802,15 @@ const AdminDashboard = () => {
                   <span className="fw-bold text-warning">{stats.pendingCars}</span>
                 </div>
                 <div className="progress mt-1" style={{ height: '8px' }}>
-                  <div 
-                    className="progress-bar bg-warning" 
-                    style={{ width: `${stats.totalCars > 0 ? (stats.pendingCars / stats.totalCars) * 100 : 0}%` }}
+                  <div
+                    className="progress-bar bg-warning"
+                    style={{
+                      width: `${
+                        stats.totalCars > 0
+                          ? (stats.pendingCars / stats.totalCars) * 100
+                          : 0
+                      }%`,
+                    }}
                   ></div>
                 </div>
               </div>
@@ -728,17 +821,21 @@ const AdminDashboard = () => {
                   <span className="fw-bold text-secondary">{stats.inactiveCars}</span>
                 </div>
                 <div className="progress mt-1" style={{ height: '8px' }}>
-                  <div 
-                    className="progress-bar bg-secondary" 
-                    style={{ width: `${stats.totalCars > 0 ? (stats.inactiveCars / stats.totalCars) * 100 : 0}%` }}
+                  <div
+                    className="progress-bar bg-secondary"
+                    style={{
+                      width: `${
+                        stats.totalCars > 0
+                          ? (stats.inactiveCars / stats.totalCars) * 100
+                          : 0
+                      }%`,
+                    }}
                   ></div>
                 </div>
               </div>
 
               <div className="text-center">
-                <small className="text-muted">
-                  Total: {stats.totalCars} cars
-                </small>
+                <small className="text-muted">Total: {stats.totalCars} cars</small>
               </div>
             </Card.Body>
           </Card>
@@ -1168,11 +1265,19 @@ const AdminDashboard = () => {
           {selectedCar && (
             <div className="border p-3 rounded bg-light">
               <div className="d-flex align-items-center">
-                <img 
-                  src={selectedCar.imageUrl || 'https://images.unsplash.com/photo.jpg'} 
+                <img
+                  src={selectedCar.imageUrl || 'https://images.unsplash.com/photo.jpg'}
                   alt={selectedCar.title}
                   className="me-3 rounded"
-                  style={{ width: '60px', height: '40px', objectFit: 'cover' }}
+                  style={{
+                    width: '60px',
+                    height: '40px',
+                    objectFit: 'cover',
+                    borderRadius: '0.75rem',
+                    boxShadow: '0 2px 8px 0 rgba(30,41,59,0.10)',
+                    border: '1px solid #e2e8f0',
+                    background: '#f1f5f9',
+                  }}
                   onError={(e) => {
                     e.target.src = 'https://images.unsplash.com/photo.jpg';
                   }}
@@ -1207,6 +1312,83 @@ const AdminDashboard = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+      {/* Responsive table tweaks and custom action button styles */}
+      <style>{`
+        @media (max-width: 991.98px) {
+          .table-responsive {
+            min-width: 100vw;
+            overflow-x: auto;
+          }
+          .car-row td {
+            font-size: 0.95rem;
+            padding: 0.75rem 0.5rem;
+          }
+        }
+        .action-btn:hover, .action-btn:focus {
+          filter: brightness(1.08);
+          box-shadow: 0 2px 8px 0 rgba(30,41,59,0.12);
+          transform: translateY(-2px) scale(1.03);
+        }
+        .car-row:hover {
+          background: #e0f2fe !important;
+        }
+        .dashboard-card {
+          border-radius: 1rem !important;
+          box-shadow: 0 4px 24px 0 rgba(30,41,59,0.08) !important;
+        }
+        /* --- Custom solid action button styles for professional palette --- */
+        .action-btn-solid {
+          color: #fff !important;
+          font-weight: 700 !important;
+          border: none !important;
+          box-shadow: 0 1px 2px 0 #e2e8f0 !important;
+          border-radius: 0.5rem !important;
+          transition: background 0.18s, box-shadow 0.18s, filter 0.18s;
+        }
+        .action-btn-solid.action-btn-activate,
+        .action-btn-solid.action-btn-mark-available,
+        .action-btn-solid.btn-success,
+        .action-btn-solid[variant="success"] {
+          background-color: #16a34a !important;
+        }
+        .action-btn-solid.action-btn-activate:hover,
+        .action-btn-solid.action-btn-mark-available:hover,
+        .action-btn-solid.btn-success:hover,
+        .action-btn-solid[variant="success"]:hover {
+          background-color: #15803d !important;
+        }
+        .action-btn-solid.action-btn-mark-sold,
+        .action-btn-solid.btn-info,
+        .action-btn-solid[variant="info"] {
+          background-color: #2563eb !important;
+        }
+        .action-btn-solid.action-btn-mark-sold:hover,
+        .action-btn-solid.btn-info:hover,
+        .action-btn-solid[variant="info"]:hover {
+          background-color: #1d4ed8 !important;
+        }
+        .action-btn-solid.action-btn-deactivate,
+        .action-btn-solid.btn-danger,
+        .action-btn-solid[variant="danger"] {
+          background-color: #dc2626 !important;
+        }
+        .action-btn-solid.action-btn-deactivate:hover,
+        .action-btn-solid.btn-danger:hover,
+        .action-btn-solid[variant="danger"]:hover {
+          background-color: #b91c1c !important;
+        }
+        .action-btn-solid.btn-primary,
+        .action-btn-solid[variant="primary"] {
+          background-color: #0d6efd !important;
+        }
+        .action-btn-solid.btn-primary:hover,
+        .action-btn-solid[variant="primary"]:hover {
+          background-color: #0a58ca !important;
+        }
+        .action-btn-solid:active, .action-btn-solid:focus {
+          filter: brightness(0.97);
+        }
+      `}</style>
     </Container>
   );
 };
