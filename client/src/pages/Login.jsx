@@ -32,10 +32,8 @@ const Login = () => {
       if (isAdmin()) {
         navigate('/admin');
       } else if (isCustomer()) {
-        navigate('/admin');
       } else {
         // Fallback to customer dashboard if role is not determined
-        navigate('/admin');
       }
     }
     
