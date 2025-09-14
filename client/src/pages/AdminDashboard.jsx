@@ -451,43 +451,6 @@ const AdminDashboard = () => {
         </Col>
       </Row>
       
-      {/* Statistics Cards */}
-      <Row className="stats-grid justify-content-center" style={{ marginBottom: '2.5rem', gap: 0 }}>
-        <Col className="stat-col" xs={12} sm={6} md={3}>
-          <Card className="stat-card text-center stat-card-equal stat-card-fixed" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none' }}>
-            <Card.Body className="d-flex flex-column justify-content-center align-items-center h-100">
-              <h3 style={{ color: '#4ade80', fontSize: '2.5rem', fontWeight: 'bold' }}>{stats.totalCars}</h3>
-              <p style={{ color: 'white', marginBottom: 0, fontSize: '1.1rem', fontWeight: '500' }}>Total Cars</p>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col className="stat-col" xs={12} sm={6} md={3}>
-          <Card className="stat-card text-center stat-card-equal stat-card-fixed" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none' }}>
-            <Card.Body className="d-flex flex-column justify-content-center align-items-center h-100">
-              <h3 style={{ color: '#4ade80', fontSize: '2.5rem', fontWeight: 'bold' }}>{stats.availableCars}</h3>
-              <p style={{ color: 'white', marginBottom: 0, fontSize: '1.1rem', fontWeight: '500' }}>Active</p>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col className="stat-col" xs={12} sm={6} md={3}>
-          <Card className="stat-card text-center stat-card-equal stat-card-fixed" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none' }}>
-            <Card.Body className="d-flex flex-column justify-content-center align-items-center h-100">
-              <h3 style={{ color: '#4ade80', fontSize: '2.5rem', fontWeight: 'bold' }}>{stats.soldCars}</h3>
-              <p style={{ color: 'white', marginBottom: 0, fontSize: '1.1rem', fontWeight: '500' }}>Sold</p>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col className="stat-col" xs={12} sm={6} md={3}>
-          <Card className="stat-card text-center stat-card-equal stat-card-fixed" style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none' }}>
-            <Card.Body className="d-flex flex-column justify-content-center align-items-center h-100">
-              <h3 style={{ color: '#4ade80', fontSize: '2.5rem', fontWeight: 'bold', letterSpacing: '-1px' }}>
-                {getDisplayRevenue()}
-              </h3>
-              <p style={{ color: 'white', marginBottom: 0, fontSize: '1.1rem', fontWeight: '500' }}>Revenue</p>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
       <Row>
         <Col>
           <Card className="dashboard-card">
