@@ -30,10 +30,12 @@ const Login = () => {
     if (result.success) {
       // Navigate to appropriate dashboard based on user role
       if (isAdmin()) {
-        navigate('/admin');
+        navigate('/dashboard');
       } else if (isCustomer()) {
+        navigate('/dashboard');
       } else {
-        // Fallback to customer dashboard if role is not determined
+        // F navigate('/dashboard');allback to customer dashboard if role is not determined
+        navigate('/dashboard');
       }
     }
     

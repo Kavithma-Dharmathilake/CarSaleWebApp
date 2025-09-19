@@ -2,7 +2,7 @@
 module.exports = {
   // Database configuration
   database: {
-    uri: process.env.MONGODB_URI || 'mongodb+srv://testing:Testing123@cluster0.koga8.mongodb.net/?retryWrites=true&w=majority',
+    uri: process.env.MONGODB_URI || 'mongodb+srv://username:password@cluster0.koga8.mongodb.net/?retryWrites=true&w=majority',
     options: {
       useNewUrlParser: true,
       useUnifiedTopology: true,

@@ -3933,7 +3933,7 @@ app.use(express.urlencoded({ extended: true }));
 // Database connection
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://testing:Testing123@cluster0.koga8.mongodb.net/?retryWrites=true&w=majority');
+    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://username:password@cluster0.koga8.mongodb.net/?retryWrites=true&w=majority');
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
     console.error('Database connection error:', error.message);
@@ -4240,7 +4240,7 @@ Let me create a configuration file instead:
 module.exports = {
   // Database configuration
   database: {
-    uri: process.env.MONGODB_URI || 'mongodb+srv://testing:Testing123@cluster0.koga8.mongodb.net/?retryWrites=true&w=majority',
+    uri: process.env.MONGODB_URI || 'mongodb+srv://username:password@cluster0.koga8.mongodb.net/?retryWrites=true&w=majority',
     options: {
       useNewUrlParser: true,
       useUnifiedTopology: true,

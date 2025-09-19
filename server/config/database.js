@@ -3,7 +3,7 @@ const config = require('./config');
 
 const connectDB = async () => {
   try {
-    uri = 'mongodb+srv://testing:Testing123@cluster0.koga8.mongodb.net/?retryWrites=true&w=majority'
+    uri = 'mongodb+srv://username:password@cluster0.koga8.mongodb.net/?retryWrites=true&w=majority'
     // const conn = await mongoose.connect(config.database.uri, config.database.options);
     const conn = await mongoose.connect(uri, config.database.options);
     console.log(`MongoDB Connected: ${conn.connection.host}`);
